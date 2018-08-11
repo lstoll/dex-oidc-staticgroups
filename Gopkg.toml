@@ -24,10 +24,16 @@
 #   go-tests = true
 #   unused-packages = true
 
+required = [
+  "github.com/coreos/dex/cmd/example-app",
+  "github.com/coreos/dex/examples/grpc-client",
+]
+
 [[constraint]]
   name = "github.com/coreos/dex"
   version = "~2.10.0"
 
+# dex needs this
 [[override]]
   name = "github.com/cockroachdb/cockroach-go"
   revision = "31611c0501c812f437d4861d87d117053967c955"

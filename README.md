@@ -1,15 +1,11 @@
-# dex-kubesecrets
+# dex-oidc-staticgroups
 
-This is a version of [dex](https://github.com/coreos/dex) that has connector based on username/passwords stored as Kubernetes Secrets. This is a simple way to get an auth service up and running for dev/testing. The credentials are managed manually directly in the Kubernetes API
+This is a version of [dex](https://github.com/coreos/dex) that has a connector that builds on the default OIDC connector, allowing groups to be mapped to users via a static mapping file.
+
+This allows it to be used with say, public google accounts but restrict who has access and assign users to groups.
+
 
 ## Configuration/Deployment
 
 A docker image is made available at [TODO](TODO)
 
-## Adding Secrets
-
-Example secret with label selector
-
-## minikube example
-
-TODO - quick end to end example using minikube (or docker for mac)

@@ -22,6 +22,7 @@
   name = "github.com/coreos/dex"
   packages = [
     "api",
+    "cmd/example-app",
     "connector",
     "connector/authproxy",
     "connector/github",
@@ -32,6 +33,7 @@
     "connector/mock",
     "connector/oidc",
     "connector/saml",
+    "examples/grpc-client",
     "server",
     "server/internal",
     "storage",
@@ -405,6 +407,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "8cc540a9d89d38a503baef3378e369099674d4415cc6eb8f18144862768f72eb"
+  inputs-digest = "c9831c9905d2a6ffaaeabd3720213bf15b20c084dab69fe4db705d351b1fc624"
   solver-name = "gps-cdcl"
   solver-version = 1
