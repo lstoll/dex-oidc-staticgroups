@@ -2,9 +2,12 @@ package oidcstatic
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/coreos/dex/connector"
+	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 var (
@@ -14,6 +17,10 @@ var (
 
 type Connector struct {
 	wrapped connector.Connector
+
+	mappings MappingFile
+
+	logger logrus.FieldLogger
 }
 
 func (c *Connector) LoginURL(s connector.Scopes, callbackURL, state string) (string, error) {
@@ -21,6 +28,7 @@ func (c *Connector) LoginURL(s connector.Scopes, callbackURL, state string) (str
 	if !ok {
 		panic("internal error - wrapped is not a callback connector")
 	}
+
 	return conn.LoginURL(s, callbackURL, state)
 }
 
@@ -30,9 +38,29 @@ func (c *Connector) HandleCallback(s connector.Scopes, r *http.Request) (identit
 		panic("internal error - wrapped is not a callback connector")
 	}
 
-	// TODO - group check goes here
+	identity, err = conn.HandleCallback(s, r)
+	if err != nil {
+		return identity, errors.Wrap(err, "Error handling callback in wrapped")
+	}
 
-	return conn.HandleCallback(s, r)
+	// Because we rely on the email to ensure the user maps, make sure it's actually verified
+	if !identity.EmailVerified {
+		c.logger.WithField("email", identity.Email).Warn("Email not verified")
+		return identity, fmt.Errorf("Email %s not verified", identity.Email)
+	}
+
+	// check if a) the email exists and b) if we should attach the groups
+	em, ok := c.mappings.Email[identity.Email]
+	if !ok {
+		c.logger.WithField("email", identity.Email).Warn("Email not in mapping")
+		return identity, fmt.Errorf("Email %s not permitted access", identity.Email)
+	}
+
+	if s.Groups {
+		identity.Groups = em.Groups
+	}
+
+	return identity, nil
 }
 
 // Refresh is implemented for backwards compatibility, even though it's a no-op.

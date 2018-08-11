@@ -3,6 +3,7 @@ package oidcstatic
 import (
 	"github.com/coreos/dex/connector"
 	"github.com/coreos/dex/connector/oidc"
+	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
 
@@ -18,7 +19,19 @@ type Config struct {
 // Open returns a connector which can be used to login users through an upstream
 // OpenID Connect provider.
 func (c *Config) Open(id string, logger logrus.FieldLogger) (conn connector.Connector, err error) {
-	// open the wrapper.
+	wr, err := c.OIDCConfig.Open(id, logger)
+	if err != nil {
+		return nil, errors.Wrap(err, "Error opening wrapped oidc connector")
+	}
 
-	return nil, nil
+	m, err := LoadMappings(c.GroupFile)
+	if err != nil {
+		return nil, errors.Wrap(err, "Error loading mappings")
+	}
+
+	return &Connector{
+		wrapped:  wr,
+		mappings: m,
+		logger:   logger,
+	}, nil
 }
