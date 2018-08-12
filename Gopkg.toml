@@ -38,6 +38,10 @@ required = [
   name = "github.com/cockroachdb/cockroach-go"
   revision = "31611c0501c812f437d4861d87d117053967c955"
 
+[[constraint]]
+  name = "github.com/pkg/errors"
+  version = "~0.8.0"
+
 [prune]
   go-tests = true
   unused-packages = true

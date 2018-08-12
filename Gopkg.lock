@@ -182,6 +182,12 @@
   version = "v1.0.1"
 
 [[projects]]
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
+  version = "v0.8.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/pquerna/cachecontrol"
   packages = [
@@ -407,6 +413,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c9831c9905d2a6ffaaeabd3720213bf15b20c084dab69fe4db705d351b1fc624"
+  inputs-digest = "21d6b23211c2525d31d1b66c457f4cbd8c2fcc86a9e338c3ac718fce209c2933"
   solver-name = "gps-cdcl"
   solver-version = 1
